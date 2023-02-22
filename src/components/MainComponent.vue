@@ -6,10 +6,10 @@ import SubtitleDisplay from "./SubtitleDisplay.vue";
 <template>
   <div class="container-fluid">
     <div id="top" class="row">
-      <div class="col-6">
+      <div class="col-8">
         <VideoPlayer />
       </div>
-      <div class="col-6">
+      <div class="col-4">
         <SubtitleDisplay />
       </div>
     </div>
