@@ -15,6 +15,7 @@
 
 <script lang="ts">
 import { useSubtitleStore } from "@/stores/subtitle";
+import { useVideoStore } from '@/stores/video';
 
 interface InputChangeEvent extends Event {
   target: HTMLInputElement;
@@ -22,10 +23,12 @@ interface InputChangeEvent extends Event {
 
 export default {
   setup() {
-    const store = useSubtitleStore();
+    const subStore = useSubtitleStore();
+    const vidStore = useVideoStore();
 
     return {
-      store,
+      subStore,
+      vidStore,
     };
   },
   data() {
@@ -44,10 +47,12 @@ export default {
         this.videoURL = URL.createObjectURL(file);
 
         const video = this.$refs.video as HTMLVideoElement;
+        this.vidStore.setVideo(video);
 
         const subs = video.addTextTrack("subtitles", "Subtitle");
-        this.store.setSubtitle(subs);
+        this.subStore.setSubtitle(subs);
       } else {
+        this.vidStore.setVideo(null);
         this.videoURL = "";
       }
     },
