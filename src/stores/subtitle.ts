@@ -4,11 +4,6 @@ import { defineStore } from "pinia";
 export const useSubtitleStore = defineStore("subtitle", () => {
   const subtitle: Ref<TextTrack> | Ref<null> = ref(null);
 
-  // const cues = computed(() => subtitle.value?.cues ?? []);
-  // const activeCue = computed(()
-  //   subtitle.value?.activeCues ? subtitle.value.activeCues[0] : null
-  // );
-
   function getCues() {
     return subtitle.value?.cues;
   }
