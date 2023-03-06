@@ -36,6 +36,15 @@ export default {
       videoURL: "",
     };
   },
+  mounted() {
+    // TODO: Move them out of here
+    this.$onDancematPress('lowerRight', () => {
+      this.vidStore.advance(5);
+    });
+    this.$onDancematPress('lowerLeft', () => {
+      this.vidStore.rewind(5);
+    });
+  },
   methods: {
     loadVideo(event: InputChangeEvent) {
       if (event.target.files && event.target.files.length == 1) {
