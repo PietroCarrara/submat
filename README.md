@@ -1,46 +1,35 @@
 # submat
 
-This template should help get you started developing with Vue 3 in Vite.
+## Documentação
 
-## Recommended IDE Setup
+Esse projeto é feito em [VueJS](https://vuejs.org/guide/introduction.html), um framework que facilita o desenvolvimento de interfaces com Javascript e HTML. Ele é bem modular, e divide as partes da interface em **componentes**. Pense neles como classes de orientação a objetos: eles possuem tanto uma descrição da parte visual quando o código que altera ela. Leia a documentação deles e veja os componentes que já temos implementados em [src/components/](src/components/)
+
+Quando um componente precisa comunicar dados para outro, em VueJS isso é feito através de um **Store**. Para isso usamos a biblioteca [Pinia](https://pinia.vuejs.org/introduction.html). Leia a documentação deles e veja os stores que já temos implementados em [src/stores/](src/stores/).
+
+A tela que "gruda" todos os componentes juntos é a [App.vue](src/App.vue).
+
+## IDE Recomendada
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## Type Support for `.vue` Imports in TS
+## Rodando o Projeto
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+Rode o comando abaixo após ter clonado este repositório, ele instalará as bibliotecas requeridas:
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+Depois, quando quiser rodar o projeto em sua máquina, execute o seguinte:
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+Ele compila o projeto e o abre em seu browser padrão. O comando também observa mudanças nos arquivos fonte, então não é necessário recarregar o browser ou re-rodar esse comando quando mudar o código.
 
-```sh
-npm run build
-```
+Pra fechar ele, é só apertar "q" no terminal, ou Ctrl+C.
 
-### Lint with [ESLint](https://eslint.org/)
+## O Que Devo Programar?
 
-```sh
-npm run lint
-```
+Veja as [issues](https://github.com/PietroCarrara/submat/issues) que ainda não foram pegas por outros membros da equipe: elas contém explicações breves sobre o que deve ser feito em cada parte do sistema.
