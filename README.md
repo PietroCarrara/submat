@@ -39,3 +39,7 @@ Pra fechar ele, é só apertar "q" no terminal, ou Ctrl+C.
 ## O Que Devo Programar?
 
 Veja as [issues](https://github.com/PietroCarrara/submat/issues) que ainda não foram pegas por outros membros da equipe: elas contém explicações breves sobre o que deve ser feito em cada parte do sistema.
+
+## Estou batendo a cabeça na tela, não consigo entender isso!
+
+Relaxa e chama o pae no zap.
