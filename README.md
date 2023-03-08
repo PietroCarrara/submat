@@ -20,13 +20,15 @@ Se você já instalou o Vetur no passado, desinstale-o de seu VSCode: ele confli
 
 ## Rodando o Projeto
 
-Rode o comando abaixo após ter clonado este repositório, ele instalará as bibliotecas requeridas:
+Primeiro, instale o [NodeJS](https://nodejs.org/en/) e o [NPM](https://www.npmjs.com/).
+
+Depois, rode o comando abaixo no terminal após ter clonado este repositório; ele instalará as bibliotecas requeridas:
 
 ```sh
 npm install
 ```
 
-Depois, quando quiser rodar o projeto em sua máquina, execute o seguinte:
+Então, quando quiser rodar o projeto em sua máquina, execute o seguinte:
 
 ```sh
 npm run dev
