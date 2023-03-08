@@ -1,6 +1,7 @@
 import { computed, ref, type Ref } from "vue";
 import { defineStore } from "pinia";
 
+// https://pinia.vuejs.org/core-concepts/#setup-stores
 export const useVideoStore = defineStore("video", () => {
   const video: Ref<HTMLMediaElement> | Ref<null> = ref(null);
 
@@ -8,6 +9,9 @@ export const useVideoStore = defineStore("video", () => {
   const duration = ref(0);
   const isPlaying = ref(false);
 
+  /**
+   * Sets the video to be used by the store
+   */
   function setVideo(v: HTMLMediaElement|null) {
     if (video.value !== null) {
       // TODO: Unregister events
@@ -34,6 +38,10 @@ export const useVideoStore = defineStore("video", () => {
     }
   }
 
+  /**
+   * Sets the current video time (seeking)
+   * @param time The desired video position in seconds
+   */
   function setCurrentTime(time: number) {
     if (video.value !== null) {
       video.value.currentTime = time;
@@ -41,6 +49,10 @@ export const useVideoStore = defineStore("video", () => {
       console.warn("setting video time but no video present!");
     }
   }
+  /**
+   * Goes back a number of seconds
+   * @param seconds The number of seconds to rewind
+   */
   function rewind(seconds: number) {
     if (video.value !== null) {
       video.value.currentTime = Math.max(0, video.value.currentTime - seconds);
@@ -48,6 +60,10 @@ export const useVideoStore = defineStore("video", () => {
       console.warn("rewinding video but no video present!");
     }
   }
+  /**
+   * Goes forward a number of seconds
+   * @param seconds The number of seconds to advance
+   */
   function advance(seconds: number) {
     if (video.value !== null) {
       video.value.currentTime = Math.min(video.value.duration, video.value.currentTime + seconds);
@@ -73,16 +89,25 @@ export const useVideoStore = defineStore("video", () => {
     }
   }
 
+  /**
+   * Pauses the video
+   */
   function pause() {
     if (video.value !== null) {
       video.value.pause();
     }
   }
+  /**
+   * Resumes the video
+   */
   function play() {
     if (video.value !== null) {
       video.value.play();
     }
   }
+  /**
+   * Toggles between pause and play
+   */
   function togglePausePlay() {
     if (video.value !== null) {
       if (video.value.paused) {
@@ -93,6 +118,7 @@ export const useVideoStore = defineStore("video", () => {
     }
   }
 
+  // The returned objects are the ones that will be exposed to be accessed via the store
   return {
     currentTime,
     duration,
