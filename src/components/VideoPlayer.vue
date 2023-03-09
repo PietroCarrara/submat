@@ -1,7 +1,7 @@
 <!-- https://vuejs.org/api/sfc-spec.html#sfc-syntax-specification -->
 
 <template>
-  <div>
+  <div style="position: relative; top: 20px">
     <!--
       If the videoURL is not set, we'll hide the video (display: none).
       https://vuejs.org/guide/essentials/class-and-style.html#binding-html-classes
@@ -17,13 +17,16 @@
     <div v-if="!videoURL">
       <input type="file" @change="loadVideo($event as InputChangeEvent)" />
     </div>
+    <div v-if="videoURL" class="progress" role="progressbar" aria-label="Progresso do video"  aria-valuemin="0" aria-valuemax="100" style="position: relative; top: 10px; height: 10px">
+      <div class="progress-bar bg-success" ></div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { useSubtitleStore } from "@/stores/subtitle";
 import { useVideoStore } from '@/stores/video';
-
+import { isReactive } from 'vue';
 // Declares
 interface InputChangeEvent extends Event {
   target: HTMLInputElement;
@@ -89,6 +92,17 @@ export default {
         this.vidStore.setVideo(null);
         this.videoURL = "";1
       }
+    },
+  },
+  computed:{
+    barra(){
+      return this.vidStore.currentTime*100/this.vidStore.duration;
+    },
+  },
+  watch:{
+    barra(){
+      var barra = document.querySelector(".progress-bar");
+      barra.style.width=this.vidStore.currentTime*100/this.vidStore.duration+"%";
     },
   },
 };
