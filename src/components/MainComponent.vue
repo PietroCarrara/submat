@@ -14,10 +14,10 @@ import SubtitleDisplay from "./SubtitleDisplay.vue";
       </div>
     </div>
     <div id="middle" class="row">
-      <div class="col-6">
-        <VideoProgressBar />
+      <div class="col-8">
+
       </div>
-      <div class="col-6">
+      <div class="col-4">
         <VideoControls />
       </div>
     </div>
