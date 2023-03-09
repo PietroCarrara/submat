@@ -89,6 +89,11 @@ export const useVideoStore = defineStore("video", () => {
     }
   }
 
+  function getVideoLoaded() {
+    return video.value !== null;
+  }
+  const isVideoLoaded = computed(getVideoLoaded);
+
   /**
    * Pauses the video
    */
@@ -123,6 +128,7 @@ export const useVideoStore = defineStore("video", () => {
     currentTime,
     duration,
     isPlaying,
+    isVideoLoaded,
     pause,
     play,
     togglePausePlay,
