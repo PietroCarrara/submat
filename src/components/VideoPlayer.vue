@@ -17,16 +17,19 @@
     <div v-if="!videoURL">
       <input type="file" @change="loadVideo($event as InputChangeEvent)" />
     </div>
-    <div v-if="videoURL" class="progress" role="progressbar" aria-label="Progresso do video"  aria-valuemin="0" aria-valuemax="100" style="position: relative; top: 10px; height: 10px">
-      <div class="progress-bar bg-success" ></div>
-    </div>
+  </div>
+  <div v-if="videoURL" class="progress" role="progressbar" aria-label="Progresso do video"  aria-valuemin="0" aria-valuemax="100" style="position: relative; top: 30px; height: 10px">
+      <div class="progress-bar bg-success"></div>
+  </div>
+  <div v-if="videoURL" class="slidecontainer">
+        <input type="range" min="0" max="100" id="duracao" class="slider" @input="progride" style="position: relative; top: 13px; left: -2px;">
   </div>
 </template>
 
 <script lang="ts">
 import { useSubtitleStore } from "@/stores/subtitle";
 import { useVideoStore } from '@/stores/video';
-import { isReactive } from 'vue';
+
 // Declares
 interface InputChangeEvent extends Event {
   target: HTMLInputElement;
@@ -93,6 +96,10 @@ export default {
         this.videoURL = "";1
       }
     },
+    progride(){
+      var scroller=document.getElementById("duracao");
+      this.vidStore.setCurrentTime(scroller.value*this.vidStore.duration/100);
+    },
   },
   computed:{
     barra(){
@@ -103,6 +110,8 @@ export default {
     barra(){
       var barra = document.querySelector(".progress-bar");
       barra.style.width=this.vidStore.currentTime*100/this.vidStore.duration+"%";
+      var scroller=document.getElementById("duracao");
+      scroller.value=this.vidStore.currentTime*100/this.vidStore.duration;
     },
   },
 };
@@ -114,4 +123,39 @@ video {
   width: 100%;
   height: 100%;
 }
+
+.slidecontainer {
+  width: 100%; /* Width of the outside container */
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  border-radius: 5px;  
+  background-color: rgba(0,0,0,0);
+  outline: none;
+  opacity: 1.0;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; 
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
 </style>
