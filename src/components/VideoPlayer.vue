@@ -10,7 +10,6 @@
       ref="video"
       :style="{ display: videoURL ? 'block' : 'none' }"
       :src="videoURL"
-      controls
       autoplay
     />
     <!-- if the videoURL is not set, display a filepicker to the user -->
@@ -50,18 +49,6 @@ export default {
     return {
       videoURL: "",
     };
-  },
-  // When this component is mounted, it registers to listen
-  // to the dancemat events.
-  // https://vuejs.org/api/composition-api-lifecycle.html#onmounted
-  mounted() {
-    // TODO: Remove these and move them to another component
-    this.$onDancematPress("lowerRight", () => {
-      this.vidStore.advance(5);
-    });
-    this.$onDancematPress("lowerLeft", () => {
-      this.vidStore.rewind(5);
-    });
   },
   // Methods this object has
   // https://vuejs.org/api/options-state.html#methods
