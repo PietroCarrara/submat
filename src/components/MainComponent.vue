@@ -22,5 +22,6 @@ import Controls from './Controls.vue';
 <style scoped>
 #main {
   height: 100vh;
+  overflow: hidden;
 }
 </style>

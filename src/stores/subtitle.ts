@@ -4,15 +4,26 @@ import { defineStore } from "pinia";
 // https://pinia.vuejs.org/core-concepts/#setup-stores
 export const useSubtitleStore = defineStore("subtitle", () => {
 
-  const subtitle: Ref<TextTrack> | Ref<null> = ref(null);
+  const subtitle = ref<TextTrack|null>(null);
+  /**
+   * List of cues contained in the subtitle
+   */
+  const cues = ref<VTTCue[]>([]);
 
   /**
    * Returns all the cues in the subtitle
    */
-  function getCues() {
-    return subtitle.value?.cues;
+  function rebuildCues() {
+    const res = [];
+
+    if (subtitle.value != null && subtitle.value.cues != null) {
+      for (const cue of subtitle.value.cues) {
+        res.push(cue as VTTCue);
+      }
+    }
+
+    cues.value = res;
   }
-  const cues = computed(getCues);
 
   /**
    * Returns the cue being displayed now
@@ -44,6 +55,7 @@ export const useSubtitleStore = defineStore("subtitle", () => {
     if (subtitle.value) {
       const cue = new VTTCue(start, end, text);
       subtitle.value.addCue(cue);
+      rebuildCues();
     }
   }
 
