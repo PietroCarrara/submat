@@ -1,7 +1,7 @@
 <template>
   <div class="root">
     <div v-if="vidStore.isVideoLoaded" class="slider-container">
-      <input ref="range" type="range" value="0" min="0" max="1" step="0.005" id="duracao" class="slider" @input="seek">
+      <input ref="range" type="range" value="0" min="0" max="1" step="0.001" id="duracao" class="slider" @input="seek">
     </div>
   </div>
 </template>
