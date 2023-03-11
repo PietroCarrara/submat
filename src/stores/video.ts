@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 
 // https://pinia.vuejs.org/core-concepts/#setup-stores
 export const useVideoStore = defineStore("video", () => {
-  const video: Ref<HTMLMediaElement> | Ref<null> = ref(null);
+  const video = ref<HTMLMediaElement|null>(null);
 
   const currentTime = ref(0);
   const duration = ref(0);
@@ -122,6 +122,13 @@ export const useVideoStore = defineStore("video", () => {
       }
     }
   }
+
+  const fps = 24;
+  setInterval(() => {
+    if (video.value != null && isPlaying.value && !video.value.seeking) {
+      currentTime.value += 1/fps;
+    }
+  }, 1000 / fps)
 
   // The returned objects are the ones that will be exposed to be accessed via the store
   return {
