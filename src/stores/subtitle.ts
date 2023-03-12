@@ -5,14 +5,17 @@ import { defineStore } from "pinia";
 export const useSubtitleStore = defineStore("subtitle", () => {
 
   const subtitle = ref<TextTrack|null>(null);
+
   /**
    * List of cues contained in the subtitle
    */
   const cues = ref<VTTCue[]>([]);
 
   /**
-   * Returns all the cues in the subtitle
+   * Cue currently being displayed
    */
+  const activeCue = ref<VTTCue|null>(null);
+
   function rebuildCues() {
     const res = [];
 
@@ -25,13 +28,6 @@ export const useSubtitleStore = defineStore("subtitle", () => {
     cues.value = res;
   }
 
-  /**
-   * Returns the cue being displayed now
-   */
-  function getActiveCue() {
-    return subtitle.value?.activeCues ? subtitle.value.activeCues[0] : null;
-  }
-  const activeCue = computed(getActiveCue);
 
   /**
    * Defines the texttrack to be used by the store.
@@ -40,9 +36,32 @@ export const useSubtitleStore = defineStore("subtitle", () => {
   function setSubtitle(s: TextTrack) {
     if (subtitle.value != null) {
       subtitle.value.mode = "disabled";
+      // TODO: Remove event listeners
     }
     subtitle.value = s;
     subtitle.value.mode = "showing";
+
+    // Update the active cue
+    s.addEventListener('cuechange', function() {
+      if (subtitle.value != null && subtitle.value.activeCues != null && subtitle.value.activeCues.length > 0) {
+        // Modify the cue object so we can detect when it's text changes
+        const cue = subtitle.value.activeCues[0] as VTTCue;
+        const cueMod = {
+          ...cue,
+          get text() {
+            return cue.text;
+          },
+          set text(s: string) {
+            cue.text = s;
+            // Update cues
+            rebuildCues();
+          },
+        }
+        activeCue.value = cueMod;
+      } else {
+        activeCue.value = null;
+      }
+    });
   }
 
   /**

@@ -2,6 +2,7 @@
 import VideoPlayer from "./VideoPlayer.vue";
 import SubtitleDisplay from "./SubtitleDisplay.vue";
 import Controls from './Controls.vue';
+import CueEdit from './CueEdit.vue';
 </script>
 
 <template>
@@ -10,7 +11,7 @@ import Controls from './Controls.vue';
       <div class="col-8">
         <VideoPlayer />
         <Controls />
-        <TextEdit />
+        <CueEdit />
       </div>
       <div class="col-4">
         <SubtitleDisplay />
