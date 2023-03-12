@@ -8,6 +8,7 @@
     -->
     <video
       ref="video"
+      @click="vidStore.togglePausePlay()"
       :style="{ display: videoURL ? 'block' : 'none' }"
       :src="videoURL"
       autoplay
