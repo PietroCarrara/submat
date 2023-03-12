@@ -60,18 +60,32 @@ export default {
       this.text = textarea.value;
       if (this.subStore.activeCue != null) {
         this.subStore.activeCue.text = this.text;
+      } else if (this.newCueStore.start != null && this.newCueStore.end == null) {
+        this.newCueStore.content = this.text;
       }
     },
+
+    newCueUpdate() {
+      if (this.newCueStore.start != null && this.newCueStore.end == null) {
+        this.enable(this.newCueStore.content);
+      }
+    }
   },
 
   watch: {
     'subStore.activeCue'() {
-      console.log(this.subStore.activeCue);
       if (this.subStore.activeCue == null) {
         this.disable();
       } else {
         this.enable(this.subStore.activeCue.text);
       }
+    },
+
+    'newCueStore.start'() {
+      this.newCueUpdate();
+    },
+    'newCueStore.end'() {
+      this.newCueUpdate();
     },
   },
 }
