@@ -26,7 +26,7 @@ export default {
       vidStore,
       subStore,
       newCueStore,
-      scale: 100,
+      scale: 40,
     }
   },
 
