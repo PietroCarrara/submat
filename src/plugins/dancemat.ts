@@ -5,18 +5,16 @@ const fps = 20;
 /**
  * Possible buttons we'll read from the mat
  */
-type ButtonName = 'lowerLeft' | 'lowerRight' | 'midLeft' | 'midRight';
+type ButtonName = 'lowerLeft' | 'lowerRight' | 'midLeft' | 'midRight' | 'down';
 
 class ButtonState {
   public readonly name: ButtonName;
-  public readonly index: number;
 
   private isDownLast = false;
   private isDown = false;
 
-  constructor(name: ButtonName, index: number) {
+  constructor(name: ButtonName) {
     this.name = name;
-    this.index = index;
   }
 
   public update(g: Gamepad) {
@@ -28,16 +26,16 @@ class ButtonState {
       case 'standard':
         switch (this.name) {
           case 'lowerLeft':
-            this.isDown = g.buttons[3].pressed; // Triangle in standard gamepad
+            this.isDown = g.buttons[3].pressed;
             break;
           case 'lowerRight':
-            this.isDown = g.buttons[2].pressed; // Square in standard gamepad
+            this.isDown = g.buttons[2].pressed;
             break;
           case 'midLeft':
-            this.isDown = g.buttons[14].pressed; // Left arrow in standard gamepad
+            this.isDown = g.buttons[14].pressed;
             break;
           case 'midRight':
-            this.isDown = g.buttons[15].pressed; // Right arrow in standard gamepad
+            this.isDown = g.buttons[15].pressed;
             break;
         }
         break;
@@ -46,16 +44,19 @@ class ButtonState {
       default:
         switch (this.name) {
           case 'lowerLeft':
-            this.isDown = g.buttons[2].pressed; // Triangle in xr gamepad
+            this.isDown = g.buttons[3].pressed;
             break;
           case 'lowerRight':
-            this.isDown = g.buttons[3].pressed; // Square in xr gamepad
+            this.isDown = g.buttons[2].pressed;
+            break;
+          case 'down':
+            this.isDown = g.buttons[14].pressed;
             break;
           case 'midLeft':
-            this.isDown = g.axes[6] <= -0.5; // Left arrow in xr gamepad
+            this.isDown = g.buttons[11].pressed;
             break;
           case 'midRight':
-            this.isDown = g.axes[6] >= 0.5; // Right arrow in xr gamepad
+            this.isDown = g.buttons[11].pressed;
             break;
         }
         break;
@@ -80,10 +81,10 @@ class ButtonState {
 }
 
 const buttons = [
-  new ButtonState('lowerLeft', 2), // Triangle
-  new ButtonState('lowerRight', 3), // Square
-  new ButtonState('midLeft', 6), // Left arrow
-  new ButtonState('midRight', 6), // Right arrow
+  new ButtonState('lowerLeft'),
+  new ButtonState('lowerRight'),
+  new ButtonState('midLeft'),
+  new ButtonState('midRight'),
 ];
 
 /**

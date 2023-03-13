@@ -47,6 +47,13 @@ export default {
     rewind() {
       this.vidStore.rewind(5);
     },
+    toggleCue() {
+      if (this.newCueStore.start == null) {
+        this.startCue()
+      } else {
+        this.endCue()
+      }
+    },
     startCue() {
       if (this.vidStore.isVideoLoaded) {
         this.newCueStore.start = this.vidStore.currentTime;
@@ -78,6 +85,7 @@ export default {
     // TODO: Deregister on unmount
     this.$onDancematPress("lowerRight", this.advance);
     this.$onDancematPress("lowerLeft", this.rewind);
+    this.$onDancematPress("down", this.toggleCue);
   },
 }
 </script>
