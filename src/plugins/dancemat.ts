@@ -85,6 +85,7 @@ const buttons = [
   new ButtonState('lowerRight'),
   new ButtonState('midLeft'),
   new ButtonState('midRight'),
+  new ButtonState('down'),
 ];
 
 /**
