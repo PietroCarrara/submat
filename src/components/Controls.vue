@@ -16,6 +16,13 @@
     <div v-if="newCueStore.start != null && newCueStore.end == null" class="control">
       <i class="big pi enabled pi-step-forward-alt" @click="endCue"></i>
     </div>
+    <div class="control float-end">
+      <i class="big pi enabled pi-save" @click="saveSubtitle"></i>
+    </div>
+    <div class="control float-end">
+      <input style="display: none;" type="file" ref="fpicker" accept=".srt" @change="openSubtitle" />
+      <i class="big pi enabled pi-folder-open" @click="($refs.fpicker as any).click()"></i>
+    </div>
   </div>
 </template>
 
@@ -23,6 +30,7 @@
 import { useVideoStore } from '@/stores/video';
 import { useNewCueStore } from '@/stores/new-cue';
 import { useSubtitleStore } from '@/stores/subtitle';
+import { parse, write } from '../lib/srt';
 
 export default {
   setup() {
@@ -56,13 +64,13 @@ export default {
     },
     startCue() {
       if (this.vidStore.isVideoLoaded) {
-        this.newCueStore.start = this.vidStore.currentTime;
+        this.newCueStore.start = Math.max(this.vidStore.currentTime - 0.150, 0);
         this.pushCue();
       }
     },
     endCue() {
       if (this.vidStore.isVideoLoaded) {
-        this.newCueStore.end = this.vidStore.currentTime;
+        this.newCueStore.end = Math.max(this.vidStore.currentTime - 0.150, 0);
         this.pushCue();
       }
     },
@@ -76,6 +84,45 @@ export default {
 
         this.newCueStore.$reset();
       }
+    },
+    saveSubtitle() {
+      const srt = write(this.subStore.cues.map(x => ({
+        start: x.startTime,
+        end: x.endTime,
+        text: x.text,
+      })));
+      this.download('subtitles.srt', srt);
+    },
+    async openSubtitle() {
+      const fpicker = this.$refs.fpicker as HTMLInputElement;
+      if (fpicker && fpicker.files && fpicker.files.length > 0) {
+        // Parse srt file
+        const file = fpicker.files[0];
+        const srt = parse(await file.text());
+
+        // Push lines to the store
+        this.subStore.clear();
+        console.log(srt);
+        for (const cue of srt) {
+          this.subStore.addCue(
+            cue.start,
+            cue.end,
+            cue.text,
+          );
+        }
+      }
+    },
+    download(fname: string, contents: string) {
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(contents));
+      element.setAttribute('download', fname);
+
+      element.style.display = 'none';
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
     },
   },
 

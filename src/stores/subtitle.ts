@@ -78,6 +78,15 @@ export const useSubtitleStore = defineStore("subtitle", () => {
     }
   }
 
+  function clear() {
+    if (subtitle.value) {
+      for (const cue of cues.value) {
+        subtitle.value.removeCue(cue);
+      }
+      rebuildCues();
+    }
+  }
+
   // The returned objects are the ones that will be exposed to be accessed via the store
   return {
     subtitle,
@@ -85,5 +94,6 @@ export const useSubtitleStore = defineStore("subtitle", () => {
     activeCue,
     setSubtitle,
     addCue,
+    clear,
   };
 });
