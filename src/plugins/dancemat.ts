@@ -110,9 +110,6 @@ function update() {
 }
 
 function onDancematPress(this: Component, btName: ButtonName, cb: Function) {
-  console.log(`Registering ${btName}`);
-  console.log(this);
-
   if (!onPressCallbacks[btName]) {
     onPressCallbacks[btName] = [];
   }

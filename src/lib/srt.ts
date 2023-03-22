@@ -1,6 +1,5 @@
 // Srt timestamp to seconds
 function srtToTime(time: string) {
-  console.log(time);
   const [hours, minutes, seconds] = time.split(':');
   const h = Number(hours)*60*60;
   const m = Number(minutes)*60;

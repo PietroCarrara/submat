@@ -1,6 +1,6 @@
 <template>
   <div ref="main" v-if="vidStore.isVideoLoaded" id="main">
-    <div class="cue-container" v-for="cue in subStore.cues" :style="calcPos(cue)">
+    <div class="cue-container" v-for="cue of subStore.cues" :style="calcPos(cue)">
       {{ cue.text }}
     </div>
     <div v-if="newCueStore.start != null && newCueStore.end == null" class="cue-container" :style="posAdding()">
@@ -8,7 +8,7 @@
     </div>
     <div id="end" class="cue-container" :style="{top: `${vidStore.duration*scale}px`}"></div>
   </div>
-  <div ref="bar" id="bar"></div>
+  <div v-if="vidStore.isVideoLoaded" ref="bar" id="bar"></div>
 </template>
 
 <script lang="ts">
@@ -64,7 +64,7 @@ export default {
         top: position - mid,
         behavior: 'smooth',
       });
-    }
+    },
   }
 }
 </script>
@@ -77,6 +77,7 @@ export default {
 
 #end {
   height: 100vh;
+  background-color: var(--color-background);
 }
 
 #bar {

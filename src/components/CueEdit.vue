@@ -31,6 +31,7 @@ export default {
 
   methods: {
     disable() {
+      console.log('disable!');
       this.text = '';
       this.enabled = false;
 
@@ -39,18 +40,18 @@ export default {
         textarea.value = '';
       }
     },
-
-    enable(text: string) {
+    async enable(text: string) {
+      console.log('enable!');
       this.enabled = true;
       this.text = text;
 
       const textarea = this.$refs.textarea as HTMLTextAreaElement;
       if (textarea != null) {
         textarea.value = text;
+        await this.$nextTick();
         textarea.focus();
       }
     },
-
     update() {
       const textarea = this.$refs.textarea as HTMLTextAreaElement;
       if (textarea == null) {
@@ -64,14 +65,12 @@ export default {
         this.newCueStore.content = this.text;
       }
     },
-
     newCueUpdate() {
       if (this.newCueStore.start != null && this.newCueStore.end == null) {
         this.enable(this.newCueStore.content);
       }
     }
   },
-
   watch: {
     'subStore.activeCue'() {
       if (this.subStore.activeCue == null) {
