@@ -13,11 +13,6 @@
       :src="videoURL"
       autoplay
     />
-    <!-- if the videoURL is not set, display a filepicker to the user -->
-    <div v-if="!videoURL">
-      <input type="file" @change="loadVideo($event as InputChangeEvent)" />
-    </div>
-
     <VideoProgressBar />
   </div>
 </template>
@@ -26,10 +21,6 @@
 import { useSubtitleStore } from "@/stores/subtitle";
 import { useVideoStore } from '@/stores/video';
 import VideoProgressBar from './VideoProgressBar.vue';
-
-interface InputChangeEvent extends Event {
-  target: HTMLInputElement;
-}
 
 export default {
   // Setup the stores. The return of this function makes causes the
@@ -55,10 +46,9 @@ export default {
   // https://vuejs.org/api/options-state.html#methods
   methods: {
     // This should be called when the user loads a video.
-    loadVideo(event: InputChangeEvent) {
-      if (event.target.files && event.target.files.length == 1) {
+    loadVideo(file: File) {
+      if (file != null) {
         // Read the file chosen by the user
-        const file = event.target.files[0];
         if (this.videoURL) {
           URL.revokeObjectURL(this.videoURL);
         }
@@ -71,7 +61,7 @@ export default {
         this.subStore.setSubtitle(subs);
       }
       else {
-        // TODO: Delete subtitle
+        this.subStore.clear();
         this.vidStore.setVideo(null);
         this.videoURL = "";
       }

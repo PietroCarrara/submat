@@ -20,7 +20,7 @@
       <i class="big pi enabled pi-save" @click="saveSubtitle"></i>
     </div>
     <div class="control float-end">
-      <input style="display: none;" type="file" ref="fpicker" accept=".srt" @change="openSubtitle" />
+      <input style="display: none;" type="file" ref="fpicker" accept=".srt" @change="pickSubtitle" />
       <i class="big pi enabled pi-folder-open" @click="($refs.fpicker as any).click()"></i>
     </div>
   </div>
@@ -44,7 +44,6 @@ export default {
       newCueStore,
     }
   },
-
   methods: {
     toggle() {
       this.vidStore.togglePausePlay();
@@ -93,23 +92,15 @@ export default {
       })));
       this.download('subtitles.srt', srt);
     },
-    async openSubtitle() {
+    async openSubtitle(file: File) {
+      const srt = parse(await file.text());
+      this.subStore.clear();
+      this.subStore.addCues(srt);
+    },
+    async pickSubtitle() {
       const fpicker = this.$refs.fpicker as HTMLInputElement;
       if (fpicker && fpicker.files && fpicker.files.length > 0) {
-        // Parse srt file
-        const file = fpicker.files[0];
-        const srt = parse(await file.text());
-
-        // Push lines to the store
-        this.subStore.clear();
-        console.log(srt);
-        for (const cue of srt) {
-          this.subStore.addCue(
-            cue.start,
-            cue.end,
-            cue.text,
-          );
-        }
+        this.openSubtitle(fpicker.files[0]);
       }
     },
     download(fname: string, contents: string) {

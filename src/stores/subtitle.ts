@@ -35,33 +35,37 @@ export const useSubtitleStore = defineStore("subtitle", () => {
    */
   function setSubtitle(s: TextTrack) {
     if (subtitle.value != null) {
+      clear();
+      subtitle.value.removeEventListener('cuechange', oncuechange);
       subtitle.value.mode = "disabled";
-      // TODO: Remove event listeners
     }
     subtitle.value = s;
     subtitle.value.mode = "showing";
 
     // Update the active cue
-    s.addEventListener('cuechange', function() {
-      if (subtitle.value != null && subtitle.value.activeCues != null && subtitle.value.activeCues.length > 0) {
-        // Modify the cue object so we can detect when it's text changes
-        const cue = subtitle.value.activeCues[0] as VTTCue;
-        const cueMod = {
-          ...cue,
-          get text() {
-            return cue.text;
-          },
-          set text(s: string) {
-            cue.text = s;
-            // Update cues
-            rebuildCues();
-          },
-        }
-        activeCue.value = cueMod;
-      } else {
-        activeCue.value = null;
+    s.addEventListener('cuechange', oncuechange);
+  }
+
+  // Make cue changes responsive to Vue
+  function oncuechange() {
+    if (subtitle.value != null && subtitle.value.activeCues != null && subtitle.value.activeCues.length > 0) {
+      // Modify the cue object so we can detect when it's text changes
+      const cue = subtitle.value.activeCues[0] as VTTCue;
+      const cueMod = {
+        ...cue,
+        get text() {
+          return cue.text;
+        },
+        set text(s: string) {
+          cue.text = s;
+          // Update cues
+          rebuildCues();
+        },
       }
-    });
+      activeCue.value = cueMod;
+    } else {
+      activeCue.value = null;
+    }
   }
 
   /**
@@ -78,10 +82,20 @@ export const useSubtitleStore = defineStore("subtitle", () => {
     }
   }
 
-  function clear() {
+  function addCues(cues: {start: number, end: number, text: string}[]) {
     if (subtitle.value) {
-      for (const cue of cues.value) {
-        subtitle.value.removeCue(cue);
+      for (const cue of cues) {
+        const c = new VTTCue(cue.start, cue.end, cue.text);
+        subtitle.value.addCue(c);
+      }
+      rebuildCues();
+    }
+  }
+
+  function clear() {
+    if (subtitle.value && subtitle.value.cues) {
+      while (subtitle.value.cues.length > 0) {
+        subtitle.value.removeCue(subtitle.value.cues[0]);
       }
       rebuildCues();
     }
@@ -94,6 +108,7 @@ export const useSubtitleStore = defineStore("subtitle", () => {
     activeCue,
     setSubtitle,
     addCue,
+    addCues,
     clear,
   };
 });
