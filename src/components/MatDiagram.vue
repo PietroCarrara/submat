@@ -28,15 +28,29 @@ export default {
     x() {
       if (this.posX) {
         const barThickness = 7/210; // Diagram bar thickness in %
+        let barPadding = 0;
+        if (this.posX == 1) {
+          barPadding = -barThickness/2;
+        } else if (this.posX == 3) {
+          barPadding = barThickness/2;
+        }
+
         const pos = (this.posX - 1) / 3;
-        return `calc(16.5% - 32px + ${pos * 100}% + ${barThickness/2*100}%)`;
+        return `calc(16.5% - 32px + ${pos * 100}% + ${barPadding*100}%)`;
       }
     },
     y() {
       if (this.posY) {
         const barThickness = 7/210; // Diagram bar thickness in %
+        let barPadding = 0;
+        if (this.posY == 1) {
+          barPadding = -barThickness/2;
+        } else if (this.posY == 3) {
+          barPadding = barThickness/2;
+        }
+
         const pos = (this.posY - 1) / 3;
-        return `calc(16.5% - 32px + ${pos * 100}% + ${barThickness/2*100}%)`;
+        return `calc(16.5% - 32px + ${pos * 100}% + ${barPadding*100}%)`;
       }
     },
   },

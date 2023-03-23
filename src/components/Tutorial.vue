@@ -4,12 +4,11 @@
 
 <template>
   <div>
-    <div class="modal modal-lg" ref="modal-el" tabindex="-1">
+    <div class="modal modal-lg" id="modal-el" ref="modal-el" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Tutorial</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="container-fluid">
@@ -20,30 +19,38 @@
                 </div>
                 <div class="col-md-7">
                   <h2>Bem vindo ao Subtitle Mat!</h2>
-                  <p>Vamos começar o nosso tutorial de como usar o sistema?</p>
                   <p>
-                    À esquerda você pode ver o diagrama representando o seu tapete.
-                    Ele será usado ao longo do tutorial para indicar as funcionalidades
-                    de cada botão.
+                    Caso não tenha um tapete ou não queira fazer este tutorial, você pode clicar em
+                    "Pular".
                   </p>
                   <p>
-                    Vamos lá: Para avançar, use o botão inferior direito. Ela lhe permite avançar
-                    tanto o vídeo quanto este tutorial.
+                    Vamos lá: Para avançar, use o botão inferior direito. Teste-o neste vídeo:
                   </p>
+                  <video ref="video1" src="/video/tutorial.mp4" loop autoplay>
+                  </video>
                   <p>
-                    Caso não tenha um tapete ou não queira fazer o tutorial, você pode clicar em "Pular".
                   </p>
                 </div>
               </div>
 
-              <div v-else-if="stage == 2">
-                Estágio 2
+              <div v-else-if="stage == 2" class="row">
+                <div class="col-md-5">
+                  <MatDiagram :pos-x="1" :pos-y="3" />
+                </div>
+                <div class="col-md-7">
+                  <p>
+                    Para retroceder no vídeo, use o botão do outro lado. Vá em frente,
+                    teste-o!
+                  </p>
+                  <video ref="video2" src="/video/tutorial.mp4" loop autoplay>
+                  </video>
+                </div>
               </div>
 
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Pular</button>
+            <button class="btn btn-secondary" @click="prev">Voltar</button>
             <button class="btn btn-primary" @click="next">Avançar</button>
           </div>
         </div>
@@ -67,12 +74,46 @@ export default {
       this.modal.show();
   },
   methods: {
-      next() {
-          this.stage++;
-          if (this.stage >= 3) {
-              this.modal?.hide();
+      async prev() {
+        if (this.stage > 1) {
+          // Preserve time between screens
+          let time = 0;
+          if (this.$refs['video' + this.stage]) {
+            time = (this.$refs['video' + this.stage] as HTMLVideoElement).currentTime;
           }
+
+          this.stage--;
+          await this.$nextTick();
+
+          if (this.$refs['video' + this.stage]) {
+            (this.$refs['video' + this.stage] as HTMLVideoElement).currentTime = time;
+          }
+        }
+      },
+      async next() {
+        // Preserve time between screens
+        let time = 0;
+        if (this.$refs['video' + this.stage]) {
+          time = (this.$refs['video' + this.stage] as HTMLVideoElement).currentTime;
+        }
+
+        this.stage++;
+        await this.$nextTick();
+
+        if (this.$refs['video' + this.stage]) {
+          (this.$refs['video' + this.stage] as HTMLVideoElement).currentTime = time;
+        }
+
+        if (this.stage >= 3) {
+            this.modal?.hide();
+        }
       },
   },
 }
 </script>
+
+<style scoped>
+  video {
+    max-width: 100%;
+  }
+</style>
