@@ -63,14 +63,20 @@ export default {
     },
     startCue() {
       if (this.vidStore.isVideoLoaded) {
-        this.newCueStore.start = Math.max(this.vidStore.currentTime - 0.150, 0);
+        if (this.vidStore.isPlaying) {
+          this.newCueStore.start = Math.max(this.vidStore.currentTime - 0.150, 0);
+        } else {
+          this.newCueStore.start = this.vidStore.currentTime;
+        }
         this.pushCue();
+        this.vidStore.play();
       }
     },
     endCue() {
       if (this.vidStore.isVideoLoaded) {
-        this.newCueStore.end = Math.max(this.vidStore.currentTime - 0.150, 0);
+        this.newCueStore.end = this.vidStore.currentTime;
         this.pushCue();
+        this.vidStore.pause();
       }
     },
     pushCue() {
