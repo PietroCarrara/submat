@@ -4,19 +4,23 @@ import SubtitleDisplay from "./SubtitleDisplay.vue";
 import Controls from './Controls.vue';
 import CueEdit from './CueEdit.vue';
 import VideoLoader from './VideoLoader.vue';
+import Tutorial from './Tutorial.vue';
 </script>
 
 <template>
-  <VideoLoader @loadvideo="loadVideo" @loadsubtitle="loadSubtitle" />
-  <div class="container-fluid">
-    <div id="main" class="row">
-      <div class="col-8">
-        <VideoPlayer ref="videoPlayer" />
-        <Controls ref="controls" />
-        <CueEdit />
-      </div>
-      <div class="col-4">
-        <SubtitleDisplay />
+  <div data-bs-theme="dark">
+    <Tutorial />
+    <VideoLoader @loadvideo="loadVideo" @loadsubtitle="loadSubtitle" />
+    <div class="container-fluid">
+      <div id="main" class="row">
+        <div class="col-8">
+          <VideoPlayer ref="videoPlayer" />
+          <Controls ref="controls" />
+          <CueEdit />
+        </div>
+        <div class="col-4">
+          <SubtitleDisplay />
+        </div>
       </div>
     </div>
   </div>
