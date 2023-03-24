@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.53644378"
-     inkscape:cx="454.84729"
-     inkscape:cy="436.206"
+     inkscape:zoom="0.49351159"
+     inkscape:cx="269.49722"
+     inkscape:cy="307.99682"
      inkscape:window-width="1366"
      inkscape:window-height="736"
      inkscape:window-x="0"
@@ -166,13 +166,13 @@
        d="M 104.99963,186.04206 V 159.041"
        id="path5140-9-6" />
     <rect
-       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-miterlimit:2;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:2;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
        id="rect7357"
        width="21.186996"
        height="21.186516"
        x="167.90601"
        y="167.90601"
-       ry="0.23002589" />
+       ry="0" />
     <g
        id="g13026">
       <path
@@ -190,5 +190,12 @@
        cx="178.4995"
        cy="31.500502"
        r="10.853012" />
+    <path
+       stroke="#000000"
+       stroke-width="5"
+       fill="#dddddd"
+       d="m 31.5,170.75145 -9.850924,17.08252 h 19.701848 z"
+       id="path25"
+       style="fill:none;stroke:#ffffff;stroke-width:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
 </svg>
