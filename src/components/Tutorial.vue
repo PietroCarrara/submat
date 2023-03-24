@@ -84,7 +84,7 @@
 
               <div v-else-if="stage == 5" class="row">
                 <div class="col-md-5">
-                  <MatDiagram :pos-x="1" :pos-y="2" />
+                  <MatDiagram />
                 </div>
                 <div class="col-md-7">
                   <p>
@@ -102,8 +102,9 @@
             </div>
           </div>
           <div class="modal-footer">
+            <button class="btn btn-danger me-auto" @click="exit">Pular</button>
             <button class="btn btn-secondary" @click="prev">Voltar</button>
-            <button class="btn btn-primary" @click="next">Avançar</button>
+            <button class="btn btn-primary" @click="next">{{ stage === 5 ? "Concluir" : "Avançar" }}</button>
           </div>
         </div>
       </div>
@@ -185,19 +186,29 @@ export default {
       }
     },
     onKeyPress(key: string) {
-      if (this.stage === 3) {
-        const video = this.$refs.video3 as HTMLVideoElement;
-        if (key === "midLeft") {
+      const video = (this.$refs.video1 ||
+                     this.$refs.video2 ||
+                     this.$refs.video3 ||
+                     this.$refs.video4 ||
+                     this.$refs.video5) as HTMLVideoElement;
+
+      switch (key) {
+        case "midLeft":
           if (video.paused) {
             video.play();
           } else {
             video.pause();
           }
-        }
+          break;
+          case "lowerLeft":
+          video.currentTime = Math.max(0, video.currentTime - 5);
+          break;
+        case "lowerRight":
+          video.currentTime = Math.min(video.duration, video.currentTime + 5);
+          break;
       }
 
       if (this.stage === 4) {
-        const video = this.$refs.video4 as HTMLVideoElement;
         if (key === "down") {
           if (this.stages[4].start === -1) {
             this.stages[4].start = video.currentTime / video.duration;
