@@ -51,18 +51,21 @@ export const useSubtitleStore = defineStore("subtitle", () => {
     if (subtitle.value != null && subtitle.value.activeCues != null && subtitle.value.activeCues.length > 0) {
       // Modify the cue object so we can detect when it's text changes
       const cue = subtitle.value.activeCues[0] as VTTCue;
-      const cueMod = {
-        ...cue,
-        get text() {
-          return cue.text;
+      Object.defineProperty(cue, '_text', {
+        value: cue.text,
+        writable: true,
+      });
+      Object.defineProperty(cue, 'text', {
+        get() {
+          return this._text;
         },
-        set text(s: string) {
-          cue.text = s;
-          // Update cues
+        set(v: string) {
+          this._text = v;
           rebuildCues();
         },
-      }
-      activeCue.value = cueMod;
+      });
+
+      activeCue.value = cue;
     } else {
       activeCue.value = null;
     }
@@ -92,11 +95,22 @@ export const useSubtitleStore = defineStore("subtitle", () => {
     }
   }
 
+  function deleteCue(cue: VTTCue) {
+    if (subtitle.value) {
+      if (activeCue.value == cue) {
+        activeCue.value = null;
+      }
+      subtitle.value.removeCue(cue);
+      rebuildCues();
+    }
+  }
+
   function clear() {
     if (subtitle.value && subtitle.value.cues) {
       while (subtitle.value.cues.length > 0) {
         subtitle.value.removeCue(subtitle.value.cues[0]);
       }
+      activeCue.value = null;
       rebuildCues();
     }
   }
@@ -109,6 +123,7 @@ export const useSubtitleStore = defineStore("subtitle", () => {
     setSubtitle,
     addCue,
     addCues,
+    deleteCue,
     clear,
   };
 });

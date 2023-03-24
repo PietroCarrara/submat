@@ -16,6 +16,10 @@
     <div v-if="newCueStore.start != null && newCueStore.end == null" class="control">
       <i class="big pi enabled pi-step-forward-alt" @click="endCue"></i>
     </div>
+    <div class="control">
+      <i class="big pi enabled pi-delete-left" @click="deleteCue"></i>
+    </div>
+
     <div class="control float-end">
       <i class="big pi enabled pi-save" @click="saveSubtitle"></i>
     </div>
@@ -53,6 +57,11 @@ export default {
     },
     rewind() {
       this.vidStore.rewind(5);
+    },
+    deleteCue() {
+      if (this.subStore.activeCue) {
+        this.subStore.deleteCue(this.subStore.activeCue);
+      }
     },
     toggleCue() {
       if (this.newCueStore.start == null) {
