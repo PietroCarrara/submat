@@ -31,7 +31,6 @@ export default {
 
   methods: {
     disable() {
-      console.log('disable!');
       this.text = '';
       this.enabled = false;
 
@@ -41,7 +40,6 @@ export default {
       }
     },
     async enable(text: string) {
-      console.log('enable!');
       this.enabled = true;
       this.text = text;
 
