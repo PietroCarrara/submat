@@ -65,9 +65,9 @@ export default {
     },
     toggleCue() {
       if (this.newCueStore.start == null) {
-        this.startCue()
+        this.startCue();
       } else {
-        this.endCue()
+        this.endCue();
       }
     },
     startCue() {
@@ -77,6 +77,14 @@ export default {
         } else {
           this.newCueStore.start = this.vidStore.currentTime;
         }
+
+        // Stop cues from overlapping
+        // This is not sufficient to stop all attemps to do so (e.g. start on a cue that ends
+        // where another one begins), but most cases won't be like this
+        if (this.subStore.activeCue) {
+          this.newCueStore.start = this.subStore.activeCue.endTime;
+        }
+
         this.pushCue();
         this.vidStore.play();
       }
@@ -84,8 +92,17 @@ export default {
     endCue() {
       if (this.vidStore.isVideoLoaded) {
         this.newCueStore.end = this.vidStore.currentTime;
-        this.pushCue();
+
+        // Stop cues from overlapping
+        // This is not sufficient to stop all attemps to do so (e.g. end two cues down the line),
+        // but most cases won't be like this
+        if (this.subStore.activeCue) {
+          this.newCueStore.end = this.subStore.activeCue.startTime;
+        }
+
         this.vidStore.pause();
+        this.vidStore.setCurrentTime(Math.max(0, this.newCueStore.end - 0.0001));
+        this.pushCue();
       }
     },
     pushCue() {

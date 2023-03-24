@@ -36,14 +36,14 @@ export const useSubtitleStore = defineStore("subtitle", () => {
   function setSubtitle(s: TextTrack) {
     if (subtitle.value != null) {
       clear();
-      subtitle.value.removeEventListener('cuechange', oncuechange);
+      subtitle.value.removeEventListener("cuechange", oncuechange);
       subtitle.value.mode = "disabled";
     }
     subtitle.value = s;
     subtitle.value.mode = "showing";
 
     // Update the active cue
-    s.addEventListener('cuechange', oncuechange);
+    s.addEventListener("cuechange", oncuechange);
   }
 
   // Make cue changes responsive to Vue
@@ -51,16 +51,12 @@ export const useSubtitleStore = defineStore("subtitle", () => {
     if (subtitle.value != null && subtitle.value.activeCues != null && subtitle.value.activeCues.length > 0) {
       // Modify the cue object so we can detect when it's text changes
       const cue = subtitle.value.activeCues[0] as VTTCue;
-      Object.defineProperty(cue, '_text', {
-        value: cue.text,
-        writable: true,
-      });
+      const text = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(cue), 'text')
       Object.defineProperty(cue, 'text', {
-        get() {
-          return this._text;
-        },
+        configurable: true,
+        get: text?.get,
         set(v: string) {
-          this._text = v;
+          text?.set?.call(this, v);
           rebuildCues();
         },
       });
