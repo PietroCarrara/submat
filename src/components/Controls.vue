@@ -153,6 +153,7 @@ export default {
   // to the dancemat events.
   mounted() {
     // TODO: Deregister on unmount
+    this.$onDancematPress("midRight", this.deleteCue);
     this.$onDancematPress("midLeft", this.toggle);
     this.$onDancematPress("lowerRight", this.advance);
     this.$onDancematPress("lowerLeft", this.rewind);

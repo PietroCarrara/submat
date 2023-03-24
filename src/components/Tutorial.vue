@@ -99,12 +99,34 @@
                 </div>
               </div>
 
+              <div v-else-if="stage == 6" class="row">
+                <div class="col-md-5">
+                  <MatDiagram :pos-x="3" :pos-y="2" />
+                </div>
+                <div class="col-md-7">
+                  <p>
+                    Para marcar o início de uma fala, use a seta inferior. Aperte-a novamente
+                    para marcar o fim da fala. As zonas em azul marcam onde estão suas falas.
+                  </p>
+                  <video ref="video6" src="/video/tutorial.mp4" loop autoplay>
+                  </video>
+                  <div class="sub-box">
+                    <div v-for="cue of stages[4].cues" class="sub-item" :style="{left: cue.start*100+'%', width: (cue.end-cue.start)*100+'%'}">
+                    </div>
+                    <div v-if="stages[4].start != -1" class="sub-item" :style="{left: stages[4].start*100+'%', width: (stages[4].progress-stages[4].start)*100+'%'}">
+                    </div>
+                    <div class="progress-tick" :style="{left: stages[4].progress*100+'%'}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-danger me-auto" @click="exit">Pular</button>
             <button class="btn btn-secondary" @click="prev">Voltar</button>
-            <button class="btn btn-primary" @click="next">{{ stage === 5 ? "Concluir" : "Avançar" }}</button>
+            <button class="btn btn-primary" @click="next">{{ stage === 6 ? "Concluir" : "Avançar" }}</button>
           </div>
         </div>
       </div>
@@ -138,6 +160,7 @@ export default {
 
     this.$onDancematPress("down", () => this.onKeyPress("down"));
     this.$onDancematPress("midLeft", () => this.onKeyPress("midLeft"));
+    this.$onDancematPress("midRight", () => this.onKeyPress("midRight"));
     this.$onDancematPress("lowerLeft", () => this.onKeyPress("lowerLeft"));
     this.$onDancematPress("lowerRight", () => this.onKeyPress("lowerRight"));
   },
@@ -181,7 +204,7 @@ export default {
       }
 
       this.onEnterStage(this.stage);
-      if (this.stage >= 6) {
+      if (this.stage > 6) {
         this.exit();
       }
     },
@@ -190,7 +213,8 @@ export default {
                      this.$refs.video2 ||
                      this.$refs.video3 ||
                      this.$refs.video4 ||
-                     this.$refs.video5) as HTMLVideoElement;
+                     this.$refs.video5 ||
+                     this.$refs.video6) as HTMLVideoElement;
 
       switch (key) {
         case "midLeft":
@@ -208,7 +232,7 @@ export default {
           break;
       }
 
-      if (this.stage === 4) {
+      if (this.stage === 4 || this.stage === 6) {
         if (key === "down") {
           if (this.stages[4].start === -1) {
             this.stages[4].start = video.currentTime / video.duration;
@@ -221,12 +245,24 @@ export default {
             this.stages[4].start = -1;
           }
         }
+        if (key === "midRight") {
+          // Delete
+          const curr = video.currentTime / video.duration;
+          this.stages[4].cues = this.stages[4].cues.filter(cue => curr < cue.start || curr > cue.end);
+        }
       }
     },
     onEnterStage(stage: number) {
+      const video = (this.$refs.video1 ||
+                     this.$refs.video2 ||
+                     this.$refs.video3 ||
+                     this.$refs.video4 ||
+                     this.$refs.video5 ||
+                     this.$refs.video6) as HTMLVideoElement;
+
       switch (stage) {
         case 4:
-          const video = this.$refs.video4 as HTMLVideoElement;
+        case 6:
           video.addEventListener("timeupdate", () => {
             this.stages[4].progress = video.currentTime / video.duration;
           });
