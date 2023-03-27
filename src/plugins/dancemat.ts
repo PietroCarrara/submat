@@ -103,18 +103,26 @@ function onDancematPress(this: Component, btName: ButtonName, cb: Function) {
   onPressCallbacks[btName].push([this, cb]);
 }
 
+function removeDancematPress(this: Component, btName: ButtonName) {
+  if (onPressCallbacks[btName]) {
+    onPressCallbacks[btName] = onPressCallbacks[btName].filter(([t, _]) => t !== this);
+  }
+}
+
 export default {
   install: (app: App) => {
     const id = setInterval(update, 1 / fps * 1000);
 
     // Register the component and it's caller
     app.config.globalProperties.$onDancematPress = onDancematPress;
+    app.config.globalProperties.$removeDancematPress = removeDancematPress;
   }
 }
 
 declare module 'vue' {
   interface ComponentCustomProperties {
     $onDancematPress: (this: Component, btName: ButtonName, cb: Function) => void
+    $removeDancematPress: (this: Component, btName: ButtonName) => void
   }
 }
 

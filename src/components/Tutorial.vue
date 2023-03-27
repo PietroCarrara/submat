@@ -89,11 +89,12 @@
                 <div class="col-md-7">
                   <p>
                     O conteúdo das legendas é editável através de um controle de texto:
+                    Experimente editá-lo!
                   </p>
                   <div>
                     <video ref="video5" src="/video/tutorial.mp4" loop autoplay>
                     </video>
-                    <span class="subtitle">{{ stages[5].text }}</span>
+                    <span class="subtitle" v-html="stages[5].text.replace('<', '&lt;').replace('>', '&gt;').replace('\n', '<br>')"></span>
                   </div>
                   <textarea autofocus v-model="stages[5].text"></textarea>
                 </div>
@@ -105,8 +106,8 @@
                 </div>
                 <div class="col-md-7">
                   <p>
-                    Para marcar o início de uma fala, use a seta inferior. Aperte-a novamente
-                    para marcar o fim da fala. As zonas em azul marcam onde estão suas falas.
+                    Para deletar uma fala, espere até que esteja sobre ela e pressione a seta da
+                    direita.
                   </p>
                   <video ref="video6" src="/video/tutorial.mp4" loop autoplay>
                   </video>
@@ -165,7 +166,7 @@ export default {
     this.$onDancematPress("lowerRight", () => this.onKeyPress("lowerRight"));
   },
   unmounted() {
-    // TODO: Deregister dancemat events
+    this.exit();
   },
   methods: {
     async prev() {
@@ -275,6 +276,12 @@ export default {
     exit() {
       this.stage = 0;
       this.modal?.hide();
+
+      this.$removeDancematPress("down");
+      this.$removeDancematPress("midLeft");
+      this.$removeDancematPress("midRight");
+      this.$removeDancematPress("lowerLeft");
+      this.$removeDancematPress("lowerRight");
     },
   },
 }
